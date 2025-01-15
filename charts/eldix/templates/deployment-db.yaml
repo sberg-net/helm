@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.appName }}-db"
+  namespace: {{ .Values.nameSpace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ .Values.appName }}-db"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.appName }}-db"
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.dbContainer.arch }}
+      containers:
+        - env:
+            - name: MARIADB_ROOT_PASSWORD
+              value: {{ .Values.dbContainer.env.MARIADB_ROOT_PASSWORD }}
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "no"
+            - name: TZ
+              value: {{ .Values.dbContainer.env.TZ}}
+          image: "mariadb:{{ .Values.dbContainer.version }}"
+          imagePullPolicy: {{ .Values.dbContainer.imagePullPolicy }}
+          name: {{ .Values.appName }}
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: vol-eldix4kim-db
+              subPath: eldix4kim/mariadb
+          resources:
+            limits:
+              cpu: {{ .Values.dbContainer.resources.limits.cpu }}
+              memory: {{ .Values.dbContainer.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.dbContainer.resources.requests.cpu }}
+              memory: {{ .Values.dbContainer.resources.requests.memory }}
+      restartPolicy: Always
+      volumes:
+        - name: vol-eldix4kim-db
+          persistentVolumeClaim:
+            claimName: pvc-cluster-storage

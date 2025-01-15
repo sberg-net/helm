@@ -1,0 +1,43 @@
+appName: eldix-test
+nameSpace: helm-test
+
+privateRegistry:
+  name: ask-sberg
+  imagePullSecret:
+    create: true
+    name: sberg-registry-pull-secret
+    username: ask-sberg
+    token: ask-sberg
+
+appContainer:
+  version: 2.6.0
+  ## use: arm64 or amd64
+  arch: arm64
+  env:
+    DB_HOST: eldix4kim-mariadb
+    DB_ROOT_PASSWORD: mrdata123!
+    TZ: Europe/Berlin
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1000Mi
+    requests:
+      cpu: 100m
+      memory: 300Mi
+  imagePullPolicy: Always
+
+dbContainer:
+  version: 10.4
+  ## use: arm64 or amd64
+  arch: arm64
+  env:
+    MARIADB_ROOT_PASSWORD: mrdata123!
+    TZ: Europe/Berlin
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 150Mi
+  imagePullPolicy: Always

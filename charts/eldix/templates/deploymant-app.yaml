@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.appName }}-app"
+  namespace: {{ .Values.nameSpace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ .Values.appName }}-app"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.appName }}-app"
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.appContainer.arch  }}
+      containers:
+      - env:
+        - name: DB-HOST
+          value: {{ default "eldix4kim-mariadb" .Values.appContainer.env.DB_HOST }}
+        - name: DB-ROOT-PASSWORD
+          value: {{ default "mrdata123!" .Values.appContainer.env.DB_ROOT_PASSWORD }}
+        - name: TZ
+          value: {{ default "Europe/Berlin" .Values.appContainer.env.TZ }}
+        image: "{{ .Values.privateRegistry.name }}/ti/eldix4kim/eldix4kim-springboot:{{ .Values.appContainer.version }}"
+        name: {{ .Values.appName }}
+        imagePullPolicy: {{ .Values.appContainer.imagePullPolicy }}
+        resources:
+          limits:
+            cpu: {{ .Values.appContainer.resources.limits.cpu }}
+            memory: {{ .Values.appContainer.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.appContainer.resources.requests.cpu }}
+            memory: {{ .Values.appContainer.resources.requests.memory }}
+      imagePullSecrets:
+      - name: {{ .Values.privateRegistry.imagePullSecret.name }}
+      restartPolicy: Always
+
