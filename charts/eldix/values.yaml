@@ -1,5 +1,5 @@
-appName: eldix-test
-nameSpace: helm-test
+appName: eldix
+nameSpace: sberg-eldix
 
 privateRegistry:
   name: ask-sberg
@@ -10,7 +10,7 @@ privateRegistry:
     token: ask-sberg
 
 appContainer:
-  version: 2.6.0
+  version: 2.8.0
   ## use: arm64 or amd64
   arch: arm64
   env:
@@ -27,6 +27,7 @@ appContainer:
   imagePullPolicy: Always
 
 dbContainer:
+  skipDeployment: false
   version: 11.4.4
   ## use: arm64 or amd64
   arch: arm64

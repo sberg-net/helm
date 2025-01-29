@@ -1,3 +1,4 @@
+{{ if not .Values.dbContainer.skipDeployment -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -42,3 +43,4 @@ spec:
         - name: vol-eldix4kim-db
           persistentVolumeClaim:
             claimName: pvc-cluster-storage
+{{- end }}
