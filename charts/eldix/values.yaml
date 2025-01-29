@@ -15,7 +15,7 @@ appContainer:
   arch: arm64
   env:
     DB_HOST: eldix4kim-mariadb
-    DB_ROOT_PASSWORD: mrdata123!
+    DB_ROOT_PASSWORD: doWhatYouWant!
     TZ: Europe/Berlin
   resources:
     limits:
@@ -27,11 +27,11 @@ appContainer:
   imagePullPolicy: Always
 
 dbContainer:
-  version: 10.4
+  version: 11.4.4
   ## use: arm64 or amd64
   arch: arm64
   env:
-    MARIADB_ROOT_PASSWORD: mrdata123!
+    MARIADB_ROOT_PASSWORD: doWhatYouWant!
     TZ: Europe/Berlin
   resources:
     limits:
