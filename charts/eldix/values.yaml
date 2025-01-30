@@ -10,11 +10,11 @@ privateRegistry:
     token: ask-sberg
 
 appContainer:
-  version: 2.8.0
+  version: 2.9.0
   ## use: arm64 or amd64
   arch: arm64
   env:
-    DB_HOST: eldix4kim-mariadb
+    DB_HOST: eldix-db
     DB_ROOT_PASSWORD: doWhatYouWant!
     TZ: Europe/Berlin
   resources:
@@ -42,3 +42,6 @@ dbContainer:
       cpu: 100m
       memory: 150Mi
   imagePullPolicy: Always
+
+storage:
+  deploy: false

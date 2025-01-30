@@ -27,10 +27,12 @@ spec:
           image: "mariadb:{{ .Values.dbContainer.version }}"
           imagePullPolicy: {{ .Values.dbContainer.imagePullPolicy }}
           name: {{ .Values.appName }}
+          {{ if .Values.storage.deploy -}}
           volumeMounts:
             - mountPath: /var/lib/mysql
               name: vol-eldix4kim-db
               subPath: eldix4kim/mariadb
+          {{- end }}
           resources:
             limits:
               cpu: {{ .Values.dbContainer.resources.limits.cpu }}
@@ -39,8 +41,10 @@ spec:
               cpu: {{ .Values.dbContainer.resources.requests.cpu }}
               memory: {{ .Values.dbContainer.resources.requests.memory }}
       restartPolicy: Always
+      {{ if .Values.storage.deploy -}}
       volumes:
         - name: vol-eldix4kim-db
           persistentVolumeClaim:
             claimName: pvc-cluster-storage
+      {{- end }}
 {{- end }}
