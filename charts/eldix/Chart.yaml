@@ -1,7 +1,23 @@
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: apache
+      image: docker.io/bitnami/apache:2.4.63-debian-12-r0
+    - name: apache-exporter
+      image: docker.io/bitnami/apache-exporter:1.0.9-debian-12-r9
+    - name: git
+      image: docker.io/bitnami/git:2.48.1-debian-12-r0
 apiVersion: v2
-name: sberg-eldix
-description: Helm chart for eldix a KIM Client System by sberg it-systeme GmbH
-type: application
-
-version: 1.0.0
 appVersion: 2.9.0
+description: Helm chart for eldix a KIM Client System by sberg it-systeme GmbH
+home: https://www.sberg.net
+keywords:
+  - Telematik Infrastruktur
+  - KIM
+  - TI
+maintainers:
+  - name: sberg it-systeme GmbH
+    url: https://github.com/sberg-net/helm/tree/main/charts
+name: eldix
+version: 1.0.0
