@@ -25,6 +25,15 @@ spec:
           value: {{ default "Europe/Berlin" .Values.appContainer.env.TZ }}
         image: "{{ .Values.privateRegistry.name }}/ti/eldix4kim/eldix4kim-springboot:{{ .Values.appContainer.version }}"
         name: {{ .Values.appName }}
+        {{ if .Values.persistence.enabled -}}
+        volumeMounts:
+          - mountPath: /eldix/logs
+            name: eldix-data
+            subPath: "{{ .Values.persistence.subPath }}/app/logs"
+          - mountPath: /eldix/data
+            name: eldix-data
+            subPath: "{{ .Values.persistence.subPath }}/app/data"
+          {{- end }}
         imagePullPolicy: {{ .Values.appContainer.imagePullPolicy }}
         resources:
           limits:
@@ -36,4 +45,11 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.imagePullSecret.name }}
       restartPolicy: Always
+      {{ if .Values.persistence.enabled -}}
+      volumes:
+        - name: eldix-data
+          persistentVolumeClaim:
+            claimName: eldix
+      {{- end }}
+
 

@@ -1,5 +1,5 @@
 appName: eldix
-nameSpace: sberg-eldix
+nameSpace: sberg
 
 privateRegistry:
   name: ask-sberg
@@ -27,7 +27,7 @@ appContainer:
   imagePullPolicy: Always
 
 dbContainer:
-  skipDeployment: false
+  enabled: true
   version: 11.4.4
   ## use: arm64 or amd64
   arch: arm64
@@ -43,5 +43,19 @@ dbContainer:
       memory: 150Mi
   imagePullPolicy: Always
 
-storage:
-  deploy: false
+persistence:
+  enabled: true
+  ## If true will use an existing PVC instead of creating one
+  # useExisting: false
+  ## Name of existing PVC to be used in the influx deployment
+  # name:
+
+  useExistingPV:
+
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.
+  # storageClass: "-"
+  size: 20Gi
+  subPath: eldix
