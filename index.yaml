@@ -6,6 +6,26 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 2.9.0
+    created: "2025-02-04T13:42:52.619748769Z"
+    description: Helm chart for eldix a KIM Client System by sberg it-systeme GmbH
+    digest: 468da31e2cbe0c25fc0fd405da6a723c3949f2c8be618516f49d9378f53338ed
+    home: https://www.sberg.net
+    keywords:
+    - Telematik Infrastruktur
+    - KIM
+    - TI
+    maintainers:
+    - name: sberg it-systeme GmbH
+      url: https://github.com/sberg-net/helm/tree/main/charts
+    name: eldix
+    urls:
+    - https://github.com/sberg-net/helm/releases/download/eldix-0.2.0/eldix-0.2.0.tgz
+    version: 0.2.0
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 2.9.0
     created: "2025-01-30T17:36:10.239061721Z"
     description: Helm chart for eldix a KIM Client System by sberg it-systeme GmbH
     digest: 93704fe40a7aa3cd190958ecebc6fdac3284c4650d43c8115dbbd2281989e0e5
@@ -41,4 +61,4 @@ entries:
     urls:
     - https://github.com/sberg-net/helm/releases/download/eldix-0.0.9/eldix-0.0.9.tgz
     version: 0.0.9
-generated: "2025-01-30T17:36:10.239069616Z"
+generated: "2025-02-04T13:42:52.619803422Z"
