@@ -19,11 +19,11 @@ appContainer:
     TZ: Europe/Berlin
   resources:
     limits:
-      cpu: 1000m
-      memory: 1000Mi
+      cpu: 1
+      memory: 2Gi
     requests:
-      cpu: 100m
-      memory: 300Mi
+      cpu: 250m
+      memory: 512Mi
   imagePullPolicy: Always
 
 dbContainer:
@@ -37,25 +37,28 @@ dbContainer:
   resources:
     limits:
       cpu: 1
-      memory: 1Gi
+      memory: 2Gi
     requests:
-      cpu: 100m
-      memory: 150Mi
+      cpu: 250m
+      memory: 512Mi
   imagePullPolicy: Always
 
 persistence:
   enabled: true
   ## If true will use an existing PVC instead of creating one
-  # useExisting: false
-  ## Name of existing PVC to be used in the influx deployment
-  # name:
-
-  useExistingPV:
-
+  #useExistingPVC: yourPVCName
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner.
-  # storageClass: "-"
-  size: 20Gi
+  #storageClass: "-"
+  size: 10Gi
   subPath: eldix
+
+  pv_static_nfs:
+    enabled: false
+    name: pv-nfs-static-eldix
+    size: 10Gi
+    nfs:
+      path: /path-to-nfs-export
+      server: NFS-Server-IP-Address

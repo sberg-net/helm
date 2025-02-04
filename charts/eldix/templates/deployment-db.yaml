@@ -45,6 +45,10 @@ spec:
       volumes:
         - name: eldix-data
           persistentVolumeClaim:
+            {{- if ( .Values.persistence.useExistingPVC ) }}
+            claimName: {{ .Values.persistence.useExistingPVC }}
+            {{- else}}
             claimName: eldix
+            {{- end}}
       {{- end }}
 {{- end }}

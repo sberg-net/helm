@@ -1,0 +1,17 @@
+
+{{- if .Values.persistence.pv_static_nfs.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.persistence.pv_static_nfs.name }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: {{ .Values.persistence.pv_static_nfs.size }}
+  nfs:
+    path: {{ .Values.persistence.pv_static_nfs.nfs.path }}
+    server: {{ .Values.persistence.pv_static_nfs.nfs.server }}
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+  {{- end }}
