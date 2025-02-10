@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "{{ .Values.appName }}-app"
-  namespace: {{ .Values.nameSpace }}
 spec:
   replicas: 1
   selector:
@@ -13,17 +12,19 @@ spec:
       labels:
         app: "{{ .Values.appName }}-app"
     spec:
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser | default 1027 }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup | default 1027 }}
+        fsGroup: {{ .Values.securityContext.fsGroup | default 1027 }}
       nodeSelector:
         kubernetes.io/arch: {{ .Values.appContainer.arch  }}
       containers:
       - env:
-        - name: DB-HOST
-          value: {{ default "eldix4kim-mariadb" .Values.appContainer.env.DB_HOST }}
-        - name: DB-ROOT-PASSWORD
-          value: {{ default "mrdata123!" .Values.appContainer.env.DB_ROOT_PASSWORD }}
-        - name: TZ
-          value: {{ default "Europe/Berlin" .Values.appContainer.env.TZ }}
-        image: "{{ .Values.privateRegistry.name }}/ti/eldix4kim/eldix4kim-springboot:{{ .Values.appContainer.version }}"
+        {{- range $name,$value := .Values.appContainer.env }}
+        - name: {{ $name }}
+          value: {{ $value | quote }}
+        {{- end }}
+        image: "{{ .Values.privateRegistry.name }}/ti/eldix4kim/eldix4kim-springboot:{{ .Values.appContainer.version | default .Chart.AppVersion }}"
         name: {{ .Values.appName }}
         {{ if .Values.persistence.enabled -}}
         volumeMounts:

@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "{{ .Values.appName }}-db"
-  namespace: {{ .Values.nameSpace }}
 spec:
   replicas: 1
   selector:
@@ -14,17 +13,19 @@ spec:
       labels:
         app: "{{ .Values.appName }}-db"
     spec:
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser | default 1027 }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup | default 1027 }}
+        fsGroup: {{ .Values.securityContext.fsGroup | default 1027 }}
       nodeSelector:
         kubernetes.io/arch: {{ .Values.dbContainer.arch }}
       containers:
         - env:
-            - name: MARIADB_ROOT_PASSWORD
-              value: {{ .Values.dbContainer.env.MARIADB_ROOT_PASSWORD }}
-            - name: MYSQL_ALLOW_EMPTY_PASSWORD
-              value: "no"
-            - name: TZ
-              value: {{ .Values.dbContainer.env.TZ}}
-          image: "mariadb:{{ .Values.dbContainer.version }}"
+            {{- range $name,$value := .Values.dbContainer.env }}
+            - name: {{ $name }}
+              value: {{ $value | quote }}
+            {{- end }}
+          image: "mariadb:{{ .Values.dbContainer.version | default "11.4.4" }}"
           imagePullPolicy: {{ .Values.dbContainer.imagePullPolicy }}
           name: {{ .Values.appName }}
           {{ if .Values.persistence.enabled -}}

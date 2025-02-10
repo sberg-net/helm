@@ -9,13 +9,21 @@ privateRegistry:
     username: ask-sberg
     token: ask-sberg
 
+securityContext:
+  # settings has effects on all pods
+  runAsUser: 1027
+  runAsGroup: 1027
+  fsGroup: 1027
+
 appContainer:
-  version: 2.9.0
-  ## use: arm64 or amd64
+  # overwrite default appVersion from chart.yaml
+  version:
+  ## possible arch's are: arm64, amd64
   arch: arm64
   env:
-    DB_HOST: eldix-db
-    DB_ROOT_PASSWORD: doWhatYouWant!
+    DB-HOST: eldix-db
+    DB-ROOT-PASSWORD: doWhatYouWant!
+    VZD-LDAP-VAL-SSL-CERT: false
     TZ: Europe/Berlin
   resources:
     limits:
@@ -28,8 +36,9 @@ appContainer:
 
 dbContainer:
   enabled: true
-  version: 11.4.4
-  ## use: arm64 or amd64
+  # overwrite default mariaDB version 11.4.4
+  version:
+  # use any official mariaDB image arch (e.g. arm64, amd64)
   arch: arm64
   env:
     MARIADB_ROOT_PASSWORD: doWhatYouWant!
