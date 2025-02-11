@@ -1,5 +1,4 @@
 appName: eldix
-nameSpace: sberg
 
 privateRegistry:
   name: ask-sberg
@@ -8,6 +7,23 @@ privateRegistry:
     name: sberg-registry-pull-secret
     username: ask-sberg
     token: ask-sberg
+
+## ingress config based on ingress-class nginx & cert manager Let's Encrypt
+ingress:
+  enabled: true
+  annotations: {
+    kubernetes.io/ingress.class: nginx,
+    cert-manager.io/cluster-issuer: letsencrypt-production,
+    kubernetes.io/tls-acme: 'true',
+    nginx.ingress.kubernetes.io/proxy-body-size: 1000m
+  }
+  labels: {}
+  path: /
+  pathType: Prefix
+  hostname: eldix-test.sberg.net
+  ## ssl cert will be requested with Let's Encrypt based on hostname
+  tls:
+    enabled: true
 
 securityContext:
   # settings has effects on all pods
@@ -18,7 +34,7 @@ securityContext:
 appContainer:
   # overwrite default appVersion from chart.yaml
   version:
-  ## possible arch's are: arm64, amd64
+  ## possible arches are: arm64, amd64
   arch: arm64
   env:
     DB-HOST: eldix-db

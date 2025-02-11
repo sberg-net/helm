@@ -2,6 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "{{ .Values.appName }}-app"
+  labels:
+    app.kubernetes.io/name: {{ .Values.appName }}
+    helm.sh/chart: {{ include "eldix.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: 1
   selector:
