@@ -23,6 +23,21 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup | default 1027 }}
       nodeSelector:
         kubernetes.io/arch: {{ .Values.appContainer.arch  }}
+      {{- if .Values.persistence.pv_static_nfs.enabled }}
+      initContainers:
+        - name: set-dir-permissions-on-static-nfs-pv
+          securityContext:
+            runAsUser: 0
+          image: busybox
+          command: [ "sh", "-c", "chgrp -R {{ .Values.securityContext.runAsUser | default 1027 }} /opt; chmod -R g+w /opt" ]
+          volumeMounts:
+            - name: eldix-data
+              mountPath: /opt/logs
+              subPath: "{{ .Values.persistence.subPath }}/app/logs"
+            - name: eldix-data
+              mountPath: /opt/data
+              subPath: "{{ .Values.persistence.subPath }}/app/data"
+      {{- end }}
       containers:
       - env:
         {{- range $name,$value := .Values.appContainer.env }}

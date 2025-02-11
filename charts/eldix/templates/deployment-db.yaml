@@ -24,6 +24,18 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup | default 1027 }}
       nodeSelector:
         kubernetes.io/arch: {{ .Values.dbContainer.arch }}
+      {{- if .Values.persistence.pv_static_nfs.enabled }}
+      initContainers:
+        - name: set-dir-permissions-on-static-nfs-pv
+          securityContext:
+            runAsUser: 0
+          image: busybox
+          command: [ "sh", "-c", "chgrp -R {{ .Values.securityContext.runAsUser | default 1027 }} /opt; chmod -R g+w /opt" ]
+          volumeMounts:
+          - name: eldix-data
+            mountPath: /opt
+            subPath: "{{ .Values.persistence.subPath }}/mariadb"
+      {{- end }}
       containers:
         - env:
             {{- range $name,$value := .Values.dbContainer.env }}
