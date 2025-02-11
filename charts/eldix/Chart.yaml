@@ -1,7 +1,7 @@
 name: eldix
 apiVersion: v2
-version: 0.2.0
-appVersion: 2.9.0
+version: 1.0.0
+appVersion: 2.9.1
 description: Helm chart for eldix a KIM Client System by sberg it-systeme GmbH
 home: https://www.sberg.net
 keywords:
