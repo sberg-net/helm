@@ -18,28 +18,29 @@ spec:
         app: "{{ .Values.appName }}-app"
     spec:
       securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser | default 1027 }}
-        runAsGroup: {{ .Values.securityContext.runAsGroup | default 1027 }}
-        fsGroup: {{ .Values.securityContext.fsGroup | default 1027 }}
+        runAsUser: {{ .Values.securityContext.runAsUser | default 0 }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup | default 0 }}
+        fsGroup: {{ .Values.securityContext.fsGroup | default 0 }}
+      {{- if .Values.appContainer.arch }}
       nodeSelector:
         kubernetes.io/arch: {{ .Values.appContainer.arch  }}
+      {{- end }}
       {{- if .Values.persistence.pv_static_nfs.enabled }}
       initContainers:
         - name: set-dir-permissions-on-static-nfs-pv
           securityContext:
             runAsUser: 0
           image: busybox
-          command: [ "sh", "-c", "chgrp -R {{ .Values.securityContext.runAsUser | default 1027 }} /opt; chmod -R g+w /opt" ]
+          command: [ "sh", "-c", "chgrp -R {{ .Values.securityContext.runAsUser | default 0 }} /opt; chmod -R g+w /opt" ]
           volumeMounts:
             - name: eldix-data
-              mountPath: /opt/logs
-              subPath: "{{ .Values.persistence.subPath }}/app/logs"
-            - name: eldix-data
-              mountPath: /opt/data
-              subPath: "{{ .Values.persistence.subPath }}/app/data"
+              mountPath: /opt/app
+              subPath: "{{ .Values.persistence.subPath }}/app"
       {{- end }}
       containers:
       - env:
+        - name: VZD-LDAP-VAL-SSL-CERT
+          value: 'false'
         {{- range $name,$value := .Values.appContainer.env }}
         - name: {{ $name }}
           value: {{ $value | quote }}
@@ -48,12 +49,9 @@ spec:
         name: {{ .Values.appName }}
         {{ if .Values.persistence.enabled -}}
         volumeMounts:
-          - mountPath: /eldix/logs
+          - mountPath: /eldix
             name: eldix-data
-            subPath: "{{ .Values.persistence.subPath }}/app/logs"
-          - mountPath: /eldix/data
-            name: eldix-data
-            subPath: "{{ .Values.persistence.subPath }}/app/data"
+            subPath: "{{ .Values.persistence.subPath }}/app"
           {{- end }}
         imagePullPolicy: {{ .Values.appContainer.imagePullPolicy }}
         resources:

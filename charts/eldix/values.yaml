@@ -10,7 +10,7 @@ privateRegistry:
 
 ## ingress config based on ingress-class nginx & cert manager Let's Encrypt
 ingress:
-  enabled: true
+  enabled: false
   annotations: {
     kubernetes.io/ingress.class: nginx,
     cert-manager.io/cluster-issuer: letsencrypt-production,
@@ -20,26 +20,26 @@ ingress:
   labels: {}
   path: /
   pathType: Prefix
-  hostname: eldix-test.sberg.net
+  hostname: eldix.your-domain.com
   ## ssl cert will be requested with Let's Encrypt based on hostname
   tls:
-    enabled: true
+    enabled: false
 
 securityContext:
-  # settings has effects on all pods
-  runAsUser: 1027
-  runAsGroup: 1027
-  fsGroup: 1027
+  # secure settings effects all pods
+  # !! if not set UID 0 will be used (pods will run with root perm) !!
+  runAsUser: 2727
+  runAsGroup: 2727
+  fsGroup: 2727
 
 appContainer:
   # overwrite default appVersion from chart.yaml
   version:
   ## possible arches are: arm64, amd64
-  arch: arm64
+  #arch:
   env:
     DB-HOST: eldix-db
     DB-ROOT-PASSWORD: doWhatYouWant!
-    VZD-LDAP-VAL-SSL-CERT: false
     TZ: Europe/Berlin
   resources:
     limits:
@@ -52,10 +52,10 @@ appContainer:
 
 dbContainer:
   enabled: true
-  # overwrite default mariaDB version 11.4.4
+  ## overwrite default mariaDB version 11.4.4
   version:
-  # use any official mariaDB image arch (e.g. arm64, amd64)
-  arch: arm64
+  ## use any official mariaDB image arch (e.g. arm64, amd64)
+  #arch:
   env:
     MARIADB_ROOT_PASSWORD: doWhatYouWant!
     TZ: Europe/Berlin
@@ -69,7 +69,7 @@ dbContainer:
   imagePullPolicy: Always
 
 persistence:
-  enabled: true
+  enabled: false
   ## If true will use an existing PVC instead of creating one
   #useExistingPVC: yourPVCName
   ## If defined, storageClassName: <storageClass>
@@ -77,13 +77,13 @@ persistence:
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner.
   #storageClass: "-"
-  size: 10Gi
+  size: 30Gi
   subPath: eldix
 
   pv_static_nfs:
     enabled: false
     name: pv-nfs-static-eldix
-    size: 10Gi
+    size: 30Gi
     nfs:
       path: /path-to-nfs-export
       server: NFS-Server-IP-Address

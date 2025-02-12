@@ -19,18 +19,24 @@ spec:
         app: "{{ .Values.appName }}-db"
     spec:
       securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser | default 1027 }}
-        runAsGroup: {{ .Values.securityContext.runAsGroup | default 1027 }}
-        fsGroup: {{ .Values.securityContext.fsGroup | default 1027 }}
+        {{- if .Values.persistence.enabled }}
+        runAsUser: {{ .Values.securityContext.runAsUser | default 0 }}
+        {{- else }}
+        runAsUser: 0
+        {{- end }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup | default 0 }}
+        fsGroup: {{ .Values.securityContext.fsGroup | default 0 }}
+      {{- if .Values.dbContainer.arch }}
       nodeSelector:
         kubernetes.io/arch: {{ .Values.dbContainer.arch }}
+      {{- end }}
       {{- if .Values.persistence.pv_static_nfs.enabled }}
       initContainers:
         - name: set-dir-permissions-on-static-nfs-pv
           securityContext:
             runAsUser: 0
           image: busybox
-          command: [ "sh", "-c", "chgrp -R {{ .Values.securityContext.runAsUser | default 1027 }} /opt; chmod -R g+w /opt" ]
+          command: [ "sh", "-c", "chgrp -R {{ .Values.securityContext.runAsUser | default 0 }} /opt; chmod -R g+w /opt" ]
           volumeMounts:
           - name: eldix-data
             mountPath: /opt
