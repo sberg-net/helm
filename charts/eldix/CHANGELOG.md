@@ -8,6 +8,7 @@
 * Probes to eldix container
 * nodeSelector {} to eldix container
 * settings {} to eldix container
+* repo/registry for eldix image
 
 ### Changed
 * internal DB to mariadb bitnami chart
