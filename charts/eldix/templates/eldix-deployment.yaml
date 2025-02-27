@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ template "eldix.fullname" . }}-app"
+  labels:
+    app.kubernetes.io/name: {{ template "eldix.name" . }}
+    helm.sh/chart: {{ include "eldix.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ template "eldix.fullname" . }}-app"
+  template:
+    metadata:
+      labels:
+        app: "{{ template "eldix.fullname" . }}-app"
+    spec:
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser | default 0 }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup | default 0 }}
+        fsGroup: {{ .Values.securityContext.fsGroup | default 0 }}
+      {{- with .Values.eldix.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.mariadb.enabled }}
+        - name: mariadb-isalive
+          image: "{{ .Values.mariadb.image.registry }}/{{ .Values.mariadb.image.repository }}:{{ .Values.mariadb.image.tag }}"
+          env:
+            - name: MYSQL_USER
+              value: {{ .Values.mariadb.auth.username }}
+            - name: MYSQL_PASSWORD
+              value: {{ .Values.mariadb.auth.password }}
+          command:
+            - "sh"
+            - "-c"
+            - {{ printf "until mysql --host=%s-mariadb --user=${MYSQL_USER} --password=${MYSQL_PASSWORD} --execute=\"SELECT 1;\"; do echo waiting for mysql; sleep 2; done;" .Release.Name }}
+        {{- end }}
+        {{- if .Values.persistence.pv_static_nfs.enabled }}
+        - name: set-dir-permissions-on-static-nfs-pv
+          securityContext:
+            runAsUser: 0
+          image: busybox
+          command: [ "sh", "-c", "chgrp -R {{ .Values.securityContext.runAsUser | default 0 }} /opt; chmod -R g+w /opt" ]
+          volumeMounts:
+            - name: eldix-data
+              mountPath: /opt/app
+              subPath: "{{ .Values.persistence.subPath }}/app"
+        {{- end }}
+      containers:
+      - name: {{ template "eldix.fullname" . }}
+        env:
+          {{- include "eldix.env" . | indent 8 }}
+        {{- if and ( .Values.eldix.image.registry ) ( .Values.eldix.image.repository ) }}
+        image: "{{ .Values.eldix.image.registry }}/{{ .Values.eldix.image.repository }}:{{ default .Chart.AppVersion .Values.eldix.image.version }}"
+        {{- else }}
+        image: "{{ .Values.privateRegistry.name }}/ti/eldix4kim/eldix4kim-springboot:{{ default .Chart.AppVersion .Values.eldix.image.version }}"
+        {{- end }}
+        {{- with .Values.eldix.livenessProbe }}
+        {{- if .enabled }}
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          successThreshold: {{ .successThreshold }}
+          failureThreshold: {{ .failureThreshold }}
+        {{- end }}
+        {{- end }}
+        {{- with .Values.eldix.readinessProbe }}
+        {{- if .enabled }}
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          successThreshold: {{ .successThreshold }}
+          failureThreshold: {{ .failureThreshold }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.eldix.startupProbe }}
+      {{- if .enabled }}
+        startupProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          successThreshold: {{ .successThreshold }}
+          failureThreshold: {{ .failureThreshold }}
+      {{- end }}
+      {{- end }}
+        {{ if .Values.eldix.persistence.enabled -}}
+        volumeMounts:
+          - mountPath: /eldix
+            name: eldix-data
+            subPath: {{- if .Values.eldix.persistence.subPath }} {{ .Values.eldix.persistence.subPath }}/app {{- else }} "app" {{- end}}
+          {{- end }}
+        imagePullPolicy: {{ .Values.eldix.image.pullPolicy }}
+        resources:
+          limits:
+            cpu: {{ .Values.eldix.resources.limits.cpu }}
+            memory: {{ .Values.eldix.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.eldix.resources.requests.cpu }}
+            memory: {{ .Values.eldix.resources.requests.memory }}
+      imagePullSecrets:
+      - name: {{ .Values.privateRegistry.imagePullSecret.name }}
+      restartPolicy: Always
+      volumes:
+        - name: eldix-data
+          {{- if .Values.eldix.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.eldix.persistence.useExistingPVC }} {{ .Values.eldix.persistence.useExistingPVC }} {{- else }} data-{{ template "eldix.fullname" . }}-app {{- end}}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+
+

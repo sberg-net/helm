@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.2.0 (xxxx)
+## 1.2.0 (2025-02-27)
 
-* add smtp port service
+### Added
+* smtp port service
+* external DB configuration
+* Probes to eldix container
+* nodeSelector {} to eldix container
+* settings {} to eldix container
+
+### Changed
+* internal DB to mariadb bitnami chart
+* ingress/tls configuration
+* rm static nfs PV parameter
+* new eldix version 2.10.1
+* update README 
 
 ## 1.1.0 (2025-02-12)
 

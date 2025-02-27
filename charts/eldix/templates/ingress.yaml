@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: "{{ .Values.appName }}-vhost"
+  name: "{{ template "eldix.fullname" . }}-vhost"
   labels:
-    app.kubernetes.io/name: {{ .Values.appName }}
+    app.kubernetes.io/name: {{ template "eldix.name" . }}
     helm.sh/chart: {{ include "eldix.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
@@ -22,15 +22,13 @@ spec:
         paths:
           - backend:
               service:
-                name: {{ .Values.appName }}-app
+                name: {{ template "eldix.fullname" . }}-app
                 port:
                   number: 80
             path: {{ .Values.ingress.path }}
             pathType: {{ .Values.ingress.pathType }}
-  {{- if .Values.ingress.tls.enabled }}
+  {{- with .Values.ingress.tls }}
   tls:
-    - hosts:
-        - {{ .Values.ingress.hostname }}
-      secretName: {{ .Values.ingress.hostname }}-tls
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 {{- end }}

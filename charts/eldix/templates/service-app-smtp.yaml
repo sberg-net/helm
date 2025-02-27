@@ -1,21 +1,21 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Values.appName }}-app-smtp"
+  name: "{{ template "eldix.fullname" . }}-app-smtp"
   labels:
-    app.kubernetes.io/name: {{ .Values.appName }}
+    app.kubernetes.io/name: {{ template "eldix.name" . }}
     helm.sh/chart: {{ include "eldix.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   ports:
-    - name: "{{ .Values.appName }}-app-smtp"
+    - name: "{{ template "eldix.fullname" . }}-app-smtp"
       port: 8888
       protocol: TCP
       targetPort: 8888
-      {{- if .Values.appContainer.smtpNodePort }}
-      nodePort: {{ .Values.appContainer.smtpNodePort }}
+      {{- if .Values.eldix.smtpNodePort }}
+      nodePort: {{ .Values.eldix.smtpNodePort }}
       {{- end }}
   selector:
-    app: "{{ .Values.appName }}-app"
+    app: "{{ template "eldix.fullname" . }}-app"
   type: NodePort
