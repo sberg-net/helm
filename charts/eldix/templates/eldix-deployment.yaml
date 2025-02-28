@@ -52,7 +52,7 @@ spec:
         {{- if .enabled }}
         livenessProbe:
           httpGet:
-            path: /actuator/health
+            path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: {{ .initialDelaySeconds }}
           periodSeconds: {{ .periodSeconds }}
@@ -65,7 +65,7 @@ spec:
         {{- if .enabled }}
         readinessProbe:
           httpGet:
-            path: /actuator/health
+            path: /actuator/health/readiness
             port: 8080
           initialDelaySeconds: {{ .initialDelaySeconds }}
           periodSeconds: {{ .periodSeconds }}
@@ -78,7 +78,7 @@ spec:
       {{- if .enabled }}
         startupProbe:
           httpGet:
-            path: /actuator/health
+            path: /actuator/health/liveness
             port: 8080
           initialDelaySeconds: {{ .initialDelaySeconds }}
           periodSeconds: {{ .periodSeconds }}
