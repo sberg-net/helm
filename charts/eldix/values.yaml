@@ -74,24 +74,12 @@ eldix:
   livenessProbe:
     enabled: true
     initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 3
-    successThreshold: 1
   readinessProbe:
     enabled: true
     initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 3
-    successThreshold: 1
   startupProbe:
     enabled: false
     initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 30
-    successThreshold: 1
 
 ## use extern DB enable this and disable mariadb
 externalDatabase:

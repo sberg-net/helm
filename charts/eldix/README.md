@@ -31,14 +31,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## eldix application settings
 
-| Name                                  | Beschreibung                            | Values                            | default         |
-|---------------------------------------|-----------------------------------------|-----------------------------------|-----------------|
-| eldix.settings.tz                     | timezone                                | tzdata zones (e.g. Europe/Berlin) | Europe/Berlin   |
-| eldix.settings.error_mail_address     | sender mail address for error massages  | mail address                      | eldix@sberg.net |
-| eldix.settings.log_max_hist           | max logfile history                     | days                              | 50              |
-| eldix.settings.log_max_file_size      | max logfile size                        | storage size (e.g. 100KB,10MB)    | 10MB            | 
-| eldix.settings.app_profile            | springboot application profile          | dev, default                      | default         |
-| eldix.settings.log_level              | app log level                           | debug, info, warn, error          | info            |
+| Name                                    | Beschreibung                                         | Values                             | default          |
+|-----------------------------------------|------------------------------------------------------|------------------------------------|------------------|
+| eldix.settings.tz                       | timezone                                             | tzdata zones (e.g. Europe/Berlin)  | Europe/Berlin    |
+| eldix.settings.error_mail_address       | sender mail address for error massages               | mail address                       | eldix@sberg.net  |
+| eldix.settings.log_max_hist             | max logfile history                                  | days                               | 50               |
+| eldix.settings.log_max_file_size        | max logfile size                                     | storage size (e.g. 100KB,10MB)     | 10MB             | 
+| eldix.settings.app_profile              | springboot application profile                       | dev, default                       | default          |
+| eldix.settings.log_level                | app log level                                        | debug, info, warn, error           | info             |
+| eldix.settings.flyway_checksum_repair   | repair checksum of init sql scripts (use with care!) | ture, false                        | false            |
 
 ## database settings
 
