@@ -39,17 +39,6 @@ spec:
             - "-c"
             - {{ printf "until mysql --host=%s-mariadb --user=${MYSQL_USER} --password=${MYSQL_PASSWORD} --execute=\"SELECT 1;\"; do echo waiting for mysql; sleep 2; done;" .Release.Name }}
         {{- end }}
-        {{- if .Values.persistence.pv_static_nfs.enabled }}
-        - name: set-dir-permissions-on-static-nfs-pv
-          securityContext:
-            runAsUser: 0
-          image: busybox
-          command: [ "sh", "-c", "chgrp -R {{ .Values.securityContext.runAsUser | default 0 }} /opt; chmod -R g+w /opt" ]
-          volumeMounts:
-            - name: eldix-data
-              mountPath: /opt/app
-              subPath: "{{ .Values.persistence.subPath }}/app"
-        {{- end }}
       containers:
       - name: {{ template "eldix.fullname" . }}
         env:
