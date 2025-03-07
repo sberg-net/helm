@@ -26,21 +26,15 @@ ingress:
   #    hosts:
   #     - eldix.domain.de
 
-securityContext:
-  # secure settings effects all pods
-  # !! if not set UID 0 will be used (pods will run with root perm) !!
-  runAsUser: 2727
-  runAsGroup: 2727
-  fsGroup: 2727
-
 eldix:
   image:
-    ## set registry & repository for your own image location (repository: path/imageName)
-    #registry:
+    ## full path and name of eldix image (e.g. repository/eldix-image)
+    ## default: values from privateRegistry
     #repository:
     ## default: version from chart.yaml
-    version:
+    #version:
     pullPolicy: Always
+  securityContext: {}
   nodeSelector: {}
   settings: {}
     #tz:

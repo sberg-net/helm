@@ -17,10 +17,10 @@ spec:
       labels:
         app: "{{ template "eldix.fullname" . }}-app"
     spec:
+      {{- with .Values.eldix.securityContext }}
       securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser | default 0 }}
-        runAsGroup: {{ .Values.securityContext.runAsGroup | default 0 }}
-        fsGroup: {{ .Values.securityContext.fsGroup | default 0 }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.eldix.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -43,11 +43,7 @@ spec:
       - name: {{ template "eldix.fullname" . }}
         env:
           {{- include "eldix.env" . | indent 8 }}
-        {{- if and ( .Values.eldix.image.registry ) ( .Values.eldix.image.repository ) }}
-        image: "{{ .Values.eldix.image.registry }}/{{ .Values.eldix.image.repository }}:{{ default .Chart.AppVersion .Values.eldix.image.version }}"
-        {{- else }}
-        image: "{{ .Values.privateRegistry.name }}/ti/eldix4kim/eldix4kim-springboot:{{ default .Chart.AppVersion .Values.eldix.image.version }}"
-        {{- end }}
+        image: {{ template "eldix.image" . }}
         {{- with .Values.eldix.livenessProbe }}
         {{- if .enabled }}
         livenessProbe:

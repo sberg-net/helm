@@ -27,6 +27,17 @@ Create secret to access docker registry
 {{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.privateRegistry.name (printf "%s:%s" .Values.privateRegistry.imagePullSecret.username .Values.privateRegistry.imagePullSecret.token | b64enc) | b64enc }}
 {{- end }}
 
+{{/*
+Create image name that is used in the deployment
+*/}}
+{{- define "eldix.image" -}}
+{{- if .Values.eldix.image.repository -}}
+{{- printf "%s:%s" .Values.eldix.image.repository (default .Chart.AppVersion .Values.eldix.image.version) -}}
+{{- else -}}
+{{- printf "%s/ti/eldix4kim/eldix4kim-springboot:%s" .Values.privateRegistry.name (default .Chart.AppVersion .Values.eldix.image.version) -}}
+{{- end -}}
+{{- end -}}
+
 
 {{/*
 Create chart name and version as used by the chart label.
