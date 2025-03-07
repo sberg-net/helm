@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.0 (2025-03-07)
+
+### Changed
+* rm default settings securityContext and use image default
+* changes on build eldix image path/name
+* please use eldix version >=2.10.2
+
 ## 1.2.0 (2025-02-27)
 
 ### Added
