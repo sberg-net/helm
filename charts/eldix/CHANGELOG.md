@@ -1,5 +1,11 @@
 # Changelog
 
+
+## 1.3.1 (2025-03-10)
+
+### Fixed
+* wrong web service name in ingress.yaml
+
 ## 1.3.0 (2025-03-07)
 
 ### Changed
