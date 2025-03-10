@@ -22,11 +22,11 @@ spec:
         paths:
           - backend:
               service:
-                name: {{ template "eldix.fullname" . }}-app
+                name: {{ template "eldix.fullname" . }}-app-web
                 port:
                   number: 80
-            path: {{ .Values.ingress.path }}
-            pathType: {{ .Values.ingress.pathType }}
+            path: {{ default "/" .Values.ingress.path }}
+            pathType: {{ default "Prefix" .Values.ingress.pathType }}
   {{- with .Values.ingress.tls }}
   tls:
     {{- toYaml . | nindent 4 }}
