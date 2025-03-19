@@ -10,7 +10,7 @@ metadata:
 spec:
   ports:
     - name: "{{ template "eldix.fullname" . }}-app-web"
-      port: "{{ default "80" .Values.eldix.service.web.port }}"
+      port: {{ default 80 .Values.eldix.service.web.port }}
       protocol: TCP
       targetPort: 8080
   selector:
