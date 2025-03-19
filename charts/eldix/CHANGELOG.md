@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.0 (2025-03-19)
+
+### Changed
+* add flexibility to service configuration 
+
+### Fixed
+* wrong if block for initContainers mariadb live check
 
 ## 1.3.1 (2025-03-10)
 
