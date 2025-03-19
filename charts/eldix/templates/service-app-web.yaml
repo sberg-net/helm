@@ -10,9 +10,9 @@ metadata:
 spec:
   ports:
     - name: "{{ template "eldix.fullname" . }}-app-web"
-      port: 80
+      port: "{{ default "80" .Values.eldix.service.web.port }}"
       protocol: TCP
       targetPort: 8080
   selector:
     app: "{{ template "eldix.fullname" . }}-app"
-  type: ClusterIP
+  type: "{{ default "ClusterIP" .Values.eldix.service.web.type }}"

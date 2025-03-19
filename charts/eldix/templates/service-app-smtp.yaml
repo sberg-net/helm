@@ -10,12 +10,12 @@ metadata:
 spec:
   ports:
     - name: "{{ template "eldix.fullname" . }}-app-smtp"
-      port: 8888
+      port: "{{ default "8888" .Values.eldix.service.smtp.port }}"
       protocol: TCP
       targetPort: 8888
-      {{- if .Values.eldix.smtpNodePort }}
-      nodePort: {{ .Values.eldix.smtpNodePort }}
+      {{- if .Values.eldix.service.smtp.nodePort }}
+      nodePort: {{ .Values.eldix.service.smtp.nodePort }}
       {{- end }}
   selector:
     app: "{{ template "eldix.fullname" . }}-app"
-  type: NodePort
+  type: "{{ default "NodePort" .Values.eldix.service.smtp.type }}"
