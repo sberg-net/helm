@@ -2,11 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "{{ template "eldix.fullname" . }}-app"
-  labels:
-    app.kubernetes.io/name: {{ template "eldix.name" . }}
-    helm.sh/chart: {{ include "eldix.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  labels: {{- include "common.labels.standard" . | nindent 8 }}
 spec:
   replicas: 1
   selector:
@@ -16,6 +12,7 @@ spec:
     metadata:
       labels:
         app: "{{ template "eldix.fullname" . }}-app"
+        {{- include "common.labels.standard" . | nindent 8 }}
     spec:
       {{- with .Values.eldix.securityContext }}
       securityContext:
@@ -46,6 +43,13 @@ spec:
         image: {{ template "eldix.image" . }}
         {{- with .Values.eldix.livenessProbe }}
         {{- if .enabled }}
+        ports:
+          - name: smtp
+            containerPort: 8888
+            protocol: TCP
+          - name: web
+            containerPort: 8080
+            protocol: TCP
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness

@@ -72,6 +72,53 @@ eldix:
     size: 30Gi
     #subPath:
 
+  networkPolicy:
+    ## Enable creation of NetworkPolicy resources
+    enabled: true
+    ## The Policy model to apply
+    ## When set to false, only pods with the correct client label will have network access to the ports MariaDB is
+    ## listening on. When true, MariaDB will accept connections from any source (with the correct destination port).
+    allowExternal: true
+    ## Allow the pod to access any range of port and all destinations.
+    allowExternalEgress: true
+    ## [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraIngress: [ ]
+    ## [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraEgress: [ ]
+    ## [object] Labels to match to allow traffic from other namespaces
+    ## [object] Pod labels to match to allow traffic from other namespaces
+    ingressNSMatchLabels: { }
+    ingressNSPodMatchLabels: { }
+
   livenessProbe:
     enabled: true
     initialDelaySeconds: 10
