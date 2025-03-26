@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0 (2025-03-26)
+
+### Added
+* add networkpolicy settings
+
 ## 1.4.0 (2025-03-19)
 
 ### Changed
