@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.1 (2025-03-27)
+
+### Fixed
+* missing common chart dependency 
+
 ## 1.5.0 (2025-03-26)
 
 ### Added
