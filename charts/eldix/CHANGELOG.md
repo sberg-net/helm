@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8.0 (2025-05-27)
+
+### Added
+* dynamic parameter settings for eldix (e.g. log setting for spring)
+
+## 1.7.0 (2025-05-21)
+
+### Changed
+* new eldix version 2.11.1
+
 ## 1.6.0 (2025-05-14)
 
 ### Changed
