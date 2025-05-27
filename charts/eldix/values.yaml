@@ -28,7 +28,7 @@ ingress:
 
 eldix:
   image:
-    ## full path and name of eldix image (e.g. repository/eldix-image)
+    ## full path and name of eldix image (e.g., repository/eldix-image)
     ## default: values from privateRegistry
     #repository:
     ## default: version from chart.yaml
@@ -43,6 +43,10 @@ eldix:
     #log_max_file_size:
     #log_level:
     #app_profile:
+  ## dynamic app parameter, (e.g., logging parameter for spring)
+  dynamicParameter:
+    #- name: LOGGER_LEVEL_NET_SBERG
+    #  value: debug
 
   service:
     web:

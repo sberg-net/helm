@@ -39,7 +39,10 @@ spec:
       containers:
       - name: {{ template "eldix.fullname" . }}
         env:
-          {{- include "eldix.env" . | indent 8 }}
+          {{ include "eldix.env" . | indent 8 }}
+          {{- with .Values.eldix.dynamicParameter }}
+          {{ toYaml . | nindent 8 }}
+          {{- end }}
         image: {{ template "eldix.image" . }}
         {{- with .Values.eldix.livenessProbe }}
         {{- if .enabled }}
