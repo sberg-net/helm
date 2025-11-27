@@ -35,6 +35,9 @@ eldix:
     #version:
     pullPolicy: Always
   securityContext: {}
+    #runAsUser: 2727
+    #runAsGroup: 2727
+    #fsGroup: 2727
   nodeSelector: {}
   settings: {}
     #tz:
