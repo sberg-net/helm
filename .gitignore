@@ -1,1 +1,3 @@
 /charts/eldix/values-local.yaml
+/.idea/
+/charts/eldix/Chart.lock
