@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.9.0 (2026-02-06)
+
+### Changed
+* new eldix version 3.7.2
+
+### Security
+* upgrade apline base image to 3.23
+
 ## 2.8.0 (2025-12-03)
 
 ### Changed
