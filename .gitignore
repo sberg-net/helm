@@ -1,3 +1,10 @@
-/charts/eldix/values-local.yaml
+# general project
 /.idea/
+
+# eldix helm
+/charts/eldix/values-local.yaml
 /charts/eldix/Chart.lock
+
+# generic helm
+/charts/generic/values-local.yaml
+/charts/generic/Chart.lock
