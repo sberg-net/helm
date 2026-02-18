@@ -621,4 +621,25 @@ entries:
     urls:
     - https://github.com/sberg-net/helm/releases/download/eldix-0.0.9/eldix-0.0.9.tgz
     version: 0.0.9
-generated: "2026-02-06T13:49:08.625390333Z"
+  generic-app:
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-18T14:48:32.727873128Z"
+    description: Helm chart for generic apps by sberg it-systeme GmbH
+    digest: 0b834f9d49f0748847094fd44c0af8a14092b10c087a8748b5623fff384fff23
+    home: https://www.sberg.net
+    keywords:
+    - generic
+    - sberg
+    - kubernetes
+    maintainers:
+    - name: sberg it-systeme GmbH
+      url: https://github.com/sberg-net/helm/tree/main/charts
+    name: generic-app
+    urls:
+    - https://github.com/sberg-net/helm/releases/download/generic-app-1.0.0/generic-app-1.0.0.tgz
+    version: 1.0.0
+generated: "2026-02-18T14:48:32.727925966Z"
