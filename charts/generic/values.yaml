@@ -1,0 +1,132 @@
+name: my-app
+
+privateRegistry:
+  name: ask-sberg
+  imagePullSecret:
+    create: true
+    name: sberg-registry-pull-secret
+    username: ask-sberg
+    token: ask-sberg
+
+## ingress config based on ingress-class nginx & cert manager Let's Encrypt
+ingress:
+  enabled: false
+  annotations: {}
+  #  kubernetes.io/ingress.class: nginx,
+  #  cert-manager.io/cluster-issuer: letsencrypt-production,
+  #  kubernetes.io/tls-acme: 'true',
+  #  nginx.ingress.kubernetes.io/proxy-body-size: 1000m
+  labels: {}
+  path: /
+  pathType: Prefix
+  hostname: app.your-domain.com
+  #tls:
+  #  - secretName: eldix-tls
+  #    hosts:
+  #     - eldix.domain.de
+
+app:
+  image:
+    ## full path and name of eldix image (e.g., repository/eldix-image)
+    ## default: values from privateRegistry
+    #repository:
+    ## default: version from chart.yaml
+    #version:
+    pullPolicy: Always
+  securityContext: {}
+    #runAsUser: 2727
+    #runAsGroup: 2727
+    #fsGroup: 2727
+  nodeSelector: {}
+  ## dynamic app parameter, (e.g., logging parameter for spring)
+  environment:
+    #- name: LOGGER_LEVEL_NET_SBERG
+    #  value: debug
+
+  service:
+    web:
+      port: 80
+      type: ClusterIP
+
+  resources:
+    limits:
+      cpu: 1
+      memory: 2Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+  persistence:
+    enabled: false
+    ## If true will use an existing PVC instead of creating one
+    #useExistingPVC:
+    ## use default storageClass with ""
+    ## disable auto storageClass with "-"
+    storageClass: ""
+    size: 30Gi
+    #subPath:
+
+  networkPolicy:
+    ## Enable creation of NetworkPolicy resources
+    enabled: true
+    ## The Policy model to apply
+    ## When set to false, only pods with the correct client label will have network access to the ports MariaDB is
+    ## listening on. When true, MariaDB will accept connections from any source (with the correct destination port).
+    allowExternal: true
+    ## Allow the pod to access any range of port and all destinations.
+    allowExternalEgress: true
+    ## [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraIngress: [ ]
+    ## [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraEgress: [ ]
+    ## [object] Labels to match to allow traffic from other namespaces
+    ## [object] Pod labels to match to allow traffic from other namespaces
+    ingressNSMatchLabels: { }
+    ingressNSPodMatchLabels: { }
+
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+
+## use extern DB enable this and disable mariadb
+externalDatabase:
+  enabled: false
+  hostname:
+  database:
+  username:
+  password:

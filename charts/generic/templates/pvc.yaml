@@ -1,0 +1,24 @@
+{{- if .Values.app.persistence.enabled  }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-{{ template "app.fullname" . }}-app
+  labels:
+    app.kubernetes.io/name: {{ template "app.name" . }}
+    helm.sh/chart: {{ include "app.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.app.persistence.size | quote }}
+  {{- if .Values.app.persistence.storageClass }}
+  {{- if (eq "-" .Values.app.persistence.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: {{ .Values.app.persistence.storageClass | quote }}
+  {{- end }}
+  {{- end }}
+{{- end }}

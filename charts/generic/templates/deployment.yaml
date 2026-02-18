@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ template "app.fullname" . }}"
+  labels: {{- include "common.labels.standard" . | nindent 8 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ template "app.fullname" . }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ template "app.fullname" . }}"
+        {{- include "common.labels.standard" . | nindent 8 }}
+    spec:
+      {{- with .Values.app.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.app.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ template "app.fullname" . }}
+        env:
+          {{- with .Values.app.environment }}
+          {{ toYaml . | nindent 8 }}
+          {{- end }}
+        image: {{ template "app.image" . }}
+        {{- with .Values.app.livenessProbe }}
+        {{- if .enabled }}
+        ports:
+          - name: web
+            containerPort: 8080
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          successThreshold: {{ .successThreshold }}
+          failureThreshold: {{ .failureThreshold }}
+        {{- end }}
+        {{- end }}
+        {{- with .Values.app.readinessProbe }}
+        {{- if .enabled }}
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          successThreshold: {{ .successThreshold }}
+          failureThreshold: {{ .failureThreshold }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.app.startupProbe }}
+      {{- if .enabled }}
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          successThreshold: {{ .successThreshold }}
+          failureThreshold: {{ .failureThreshold }}
+      {{- end }}
+      {{- end }}
+        {{ if .Values.app.persistence.enabled -}}
+        volumeMounts:
+          - mountPath: /eldix
+            name: eldix-data
+            subPath: {{- if .Values.app.persistence.subPath }} {{ .Values.app.persistence.subPath }}/app {{- else }} "app" {{- end}}
+          {{- end }}
+        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+        resources:
+          limits:
+            cpu: {{ .Values.app.resources.limits.cpu }}
+            memory: {{ .Values.app.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.app.resources.requests.cpu }}
+            memory: {{ .Values.app.resources.requests.memory }}
+      imagePullSecrets:
+      - name: {{ .Values.privateRegistry.imagePullSecret.name }}
+      restartPolicy: Always
+      volumes:
+        - name: app-data
+          {{- if .Values.app.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.app.persistence.useExistingPVC }} {{ .Values.app.persistence.useExistingPVC }} {{- else }} data-{{ template "app.fullname" . }}-app {{- end}}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+
+

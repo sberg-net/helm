@@ -1,0 +1,34 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "{{ template "app.fullname" . }}-vhost"
+  labels:
+    app.kubernetes.io/name: {{ template "app.name" . }}
+    helm.sh/chart: {{ include "app.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- with .Values.ingress.labels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+    - host: {{ .Values.ingress.hostname }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ template "app.fullname" . }}-app-web
+                port:
+                  number: 80
+            path: {{ default "/" .Values.ingress.path }}
+            pathType: {{ default "Prefix" .Values.ingress.pathType }}
+  {{- with .Values.ingress.tls }}
+  tls:
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

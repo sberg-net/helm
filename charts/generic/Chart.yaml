@@ -1,0 +1,16 @@
+name: genericApp
+apiVersion: v2
+version: 1.0.0
+appVersion: 1.0.0
+description: Helm chart for generic apps by sberg it-systeme GmbH
+home: https://www.sberg.net
+keywords:
+  - generic
+  - sberg
+  - kubernetes
+maintainers:
+  - name: sberg it-systeme GmbH
+    url: https://github.com/sberg-net/helm/tree/main/charts
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
