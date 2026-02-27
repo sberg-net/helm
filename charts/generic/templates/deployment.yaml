@@ -32,10 +32,16 @@ spec:
               value: {{ .Values.mariadb.auth.username }}
             - name: MYSQL_PASSWORD
               value: {{ .Values.mariadb.auth.password }}
+            - name: MYSQL_ROOT_PASSWORD
+              value: {{ .Values.mariadb.auth.rootPassword }}
           command:
             - "sh"
             - "-c"
+            {{- if .Values.mariadb.auth.rootPassword }}
+            - {{ printf "until mariadb --host=%s-mariadb --user=root --password=${MYSQL_ROOT_PASSWORD} --execute=\"SELECT 1;\"; do echo waiting for mariadb; sleep 2; done;" .Release.Name }}
+            {{- else }}
             - {{ printf "until mariadb --host=%s-mariadb --user=${MYSQL_USER} --password=${MYSQL_PASSWORD} --execute=\"SELECT 1;\"; do echo waiting for mariadb; sleep 2; done;" .Release.Name }}
+            {{- end }}
       {{- end }}
       containers:
       - name: {{ template "app.fullname" . }}
