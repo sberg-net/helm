@@ -65,6 +65,8 @@ app:
     ## disable auto storageClass with "-"
     storageClass: ""
     size: 30Gi
+    ## mountPath must be set, is the internal mount path for the app
+    mountPath: "/tmp"
     #subPath:
 
   networkPolicy:

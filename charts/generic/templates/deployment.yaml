@@ -95,10 +95,10 @@ spec:
       {{- end }}
         {{ if .Values.app.persistence.enabled -}}
         volumeMounts:
-          - mountPath: /eldix
-            name: eldix-data
+          - mountPath: {{ .Values.app.persistence.mountPath }}
+            name: {{ template "app.fullname" }}-data
             subPath: {{- if .Values.app.persistence.subPath }} {{ .Values.app.persistence.subPath }}/app {{- else }} "app" {{- end}}
-          {{- end }}
+        {{- end }}
         imagePullPolicy: {{ .Values.app.image.pullPolicy }}
         resources:
           limits:
@@ -114,7 +114,7 @@ spec:
         - name: app-data
           {{- if .Values.app.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ if .Values.app.persistence.useExistingPVC }} {{ .Values.app.persistence.useExistingPVC }} {{- else }} data-{{ template "app.fullname" . }}-app {{- end}}
+            claimName: {{ if .Values.app.persistence.useExistingPVC }} {{ .Values.app.persistence.useExistingPVC }} {{- else }} {{ template "app.fullname" . }}-app {{- end}}
           {{- else }}
           emptyDir: {}
           {{- end }}
