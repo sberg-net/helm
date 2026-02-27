@@ -2,7 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "{{ template "app.fullname" . }}"
-  labels: {{- include "common.labels.standard" . | nindent 8 }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
@@ -12,7 +13,7 @@ spec:
     metadata:
       labels:
         app: "{{ template "app.fullname" . }}"
-        {{- include "common.labels.standard" . | nindent 8 }}
+        {{- include "app.labels" . | nindent 8 }}
     spec:
       {{- with .Values.app.securityContext }}
       securityContext:
@@ -21,6 +22,20 @@ spec:
       {{- with .Values.app.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.mariadb.enabled }}
+      initContainers:
+        - name: mariadb-isalive
+          image: "docker.io/mariadb:12.2.2"
+          env:
+            - name: MYSQL_USER
+              value: {{ .Values.mariadb.auth.username }}
+            - name: MYSQL_PASSWORD
+              value: {{ .Values.mariadb.auth.password }}
+          command:
+            - "sh"
+            - "-c"
+            - {{ printf "until mariadb --host=%s-mariadb --user=${MYSQL_USER} --password=${MYSQL_PASSWORD} --execute=\"SELECT 1;\"; do echo waiting for mariadb; sleep 2; done;" .Release.Name }}
       {{- end }}
       containers:
       - name: {{ template "app.fullname" . }}

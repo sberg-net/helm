@@ -1,4 +1,5 @@
-name: my-app
+nameOverride: ""
+fullnameOverride: ""
 
 privateRegistry:
   name: ask-sberg
@@ -123,10 +124,16 @@ app:
     enabled: false
     initialDelaySeconds: 30
 
-## use extern DB enable this and disable mariadb
-externalDatabase:
+## use mariadb enable this and disable externalDatabase
+mariadb:
   enabled: false
-  hostname:
-  database:
-  username:
-  password:
+  auth:
+    database:
+    username:
+    password:
+  primary:
+    persistence:
+      enabled: false
+      ## use default with ""
+      storageClass: ""
+      size: 5Gi

@@ -8,3 +8,4 @@
 # generic helm
 /charts/generic/values-local.yaml
 /charts/generic/Chart.lock
+/charts/generic/temp/
