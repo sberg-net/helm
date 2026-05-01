@@ -107,8 +107,10 @@ spec:
           requests:
             cpu: {{ .Values.app.resources.requests.cpu }}
             memory: {{ .Values.app.resources.requests.memory }}
+      {{- if .Values.privateRegistry.enabled }}
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.imagePullSecret.name }}
+      {{- end }}
       restartPolicy: Always
       volumes:
         - name: app-data
