@@ -1,14 +1,14 @@
 nameOverride: ""
 fullnameOverride: ""
 
-## private registry
-#privateRegistry:
-#  name: ask-sberg
-#  imagePullSecret:
-#    create: true
-#    name: sberg-registry-pull-secret
-#    username: ask-sberg
-#    token: ask-sberg
+## use private registry
+privateRegistry:
+  enabled: false
+  #name: ask-sberg
+  #imagePullSecret:
+  #  name: sberg-registry-pull-secret
+  #  username: ask-sberg
+  #  token: ask-sberg
 
 ## ingress config based on ingress-class nginx & cert manager Let's Encrypt
 ingress:
