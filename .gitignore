@@ -9,3 +9,4 @@
 /charts/generic/values-local.yaml
 /charts/generic/Chart.lock
 /charts/generic/temp/
+/charts/generic/values-local-elbook.yaml

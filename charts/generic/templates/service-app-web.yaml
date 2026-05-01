@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: "{{ template "app.fullname" . }}-web"
   labels:
-    app.kubernetes.io/name: {{ template "app.name" . }}
+    app.kubernetes.io/name: {{ template "app.fullname" . }}
     helm.sh/chart: {{ include "app.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
