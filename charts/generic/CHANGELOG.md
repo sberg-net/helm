@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.4.3 (2026-05-04)
+
+### Fixed
+*the wrong name in the ingress template
+
 ## 1.4.1 (2026-05-01)
 
 ### Fixed
