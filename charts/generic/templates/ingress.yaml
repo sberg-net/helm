@@ -22,7 +22,7 @@ spec:
         paths:
           - backend:
               service:
-                name: {{ template "app.fullname" . }}-app-web
+                name: {{ template "app.fullname" . }}-web
                 port:
                   number: 80
             path: {{ default "/" .Values.ingress.path }}
