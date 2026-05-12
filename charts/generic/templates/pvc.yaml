@@ -2,12 +2,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: "data-{{ template "app.fullname" . }}"
+  name: "data-{{ template "app.fullname" . }}-app"
   labels:
-    app.kubernetes.io/name: {{ template "app.fullname" . }}
-    helm.sh/chart: {{ include "app.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "app.labels" . | nindent 4 }}
 spec:
   accessModes:
     - ReadWriteMany
