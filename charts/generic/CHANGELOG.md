@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.5.0 (2026-05-12)
+
+### Added
+* flexible volume mounts
+
 # 1.4.5 (2026-05-12)
 
 ### Fixed
