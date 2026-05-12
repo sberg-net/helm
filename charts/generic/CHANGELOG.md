@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.4.5 (2026-05-12)
+
+### Fixed
+* fix app naming
+
 # 1.4.4 (2026-05-12)
 
 ### Fixed
