@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: data-{{ template "app.fullname" . }}-app
+  name: "data-{{ template "app.fullname" . }}"
   labels:
     app.kubernetes.io/name: {{ template "app.fullname" . }}
     helm.sh/chart: {{ include "app.chart" . }}
