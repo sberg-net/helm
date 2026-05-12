@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.4.4 (2026-05-12)
+
+### Fixed
+* fix pvc parser issue
+
 # 1.4.3 (2026-05-04)
 
 ### Fixed
