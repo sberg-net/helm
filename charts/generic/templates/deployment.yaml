@@ -95,11 +95,13 @@ spec:
       {{- end }}
         {{ if .Values.app.persistence.enabled -}}
         volumeMounts:
-          - mountPath: {{ .Values.app.persistence.mountPath }}
-            name: "{{ template "app.fullname" . }}-data"
-            {{- if .Values.app.persistence.subPath }}
-            subPath: {{- .Values.app.persistence.subPath }}
+          {{- range $storage := .Values.app.volumeMounts }}
+          - name: "{{ include "app.fullname" $ }}-data"
+            mountPath: {{ $storage.mountPath }}
+            {{- if $storage.subPath }}
+            subPath: {{ $storage.subPath }}
             {{- end}}
+          {{- end }}
         {{- end }}
         imagePullPolicy: {{ .Values.app.image.pullPolicy }}
         resources:
@@ -115,12 +117,16 @@ spec:
       {{- end }}
       restartPolicy: Always
       volumes:
+        {{- if not .Values.app.persistence.enabled }}
         - name: "{{ template "app.fullname" . }}-data"
-          {{- if .Values.app.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ if .Values.app.persistence.useExistingPVC }} {{ .Values.app.persistence.useExistingPVC }} {{- else }} data-{{ template "app.fullname" . }}-app {{- end}}
-          {{- else }}
           emptyDir: {}
-          {{- end }}
-
+        {{- else }}
+        - name: "{{ include "app.fullname" $ }}-data"
+          persistentVolumeClaim:
+            claimName: {{ if .Values.app.persistence.useExistingPVC }}
+                          {{ .Values.eldix.persistence.useExistingPVC }} }}
+                        {{- else }}
+                          data-{{ include "app.fullname" $ }}-app
+                        {{- end }}
+        {{- end }}
 

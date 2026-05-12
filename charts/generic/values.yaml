@@ -66,9 +66,13 @@ app:
     ## disable auto storageClass with "-"
     storageClass: ""
     size: 30Gi
-    ## mountPath must be set, is the internal mount path for the app
-    mountPath: "/tmp"
-    #subPath:
+
+  ## volume mounts for app will be used if persistence.enabled is true
+  volumeMounts:
+    - mountPath: /tmp
+    #  subPath: tmp
+    #- mountPath: elbook-data
+    #  subPath: app
 
   livenessProbe:
     enabled: true
