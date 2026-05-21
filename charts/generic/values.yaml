@@ -40,6 +40,7 @@ app:
     #runAsGroup: 2727
     #fsGroup: 2727
   nodeSelector: {}
+  tolerations: []
   ## dynamic app parameter, (e.g., logging parameter for spring)
   environment:
     #- name: LOGGER_LEVEL_NET_SBERG
