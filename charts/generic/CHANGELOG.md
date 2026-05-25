@@ -1,6 +1,11 @@
 # Changelog
 
-# 1.8.0 (2026-05-125)
+# 1.9.0 (2026-05-25)
+
+### Added
+* add multiple port definitions
+
+# 1.8.0 (2026-05-25)
 
 ### Added
 * add multiple service configurations
