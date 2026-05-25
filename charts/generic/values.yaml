@@ -77,12 +77,18 @@ app:
 
   livenessProbe:
     enabled: true
+    #path: /actuator/health/liveness
+    #port: 8080
     initialDelaySeconds: 10
   readinessProbe:
     enabled: true
+    #path: /actuator/health/readiness
+    #port: 8080
     initialDelaySeconds: 10
   startupProbe:
     enabled: false
+    #path: /actuator/health/liveness
+    #port: 8080
     initialDelaySeconds: 30
 
 ## use mariadb enable this and disable externalDatabase

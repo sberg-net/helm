@@ -62,8 +62,8 @@ spec:
             protocol: TCP
         livenessProbe:
           httpGet:
-            path: /actuator/health/liveness
-            port: 8080
+            path: {{ default "/actuator/health/liveness" .path }}
+            port: {{ default 8080 .port }}
           initialDelaySeconds: {{ .initialDelaySeconds }}
           periodSeconds: {{ .periodSeconds }}
           timeoutSeconds: {{ .timeoutSeconds }}
@@ -75,8 +75,8 @@ spec:
         {{- if .enabled }}
         readinessProbe:
           httpGet:
-            path: /actuator/health/readiness
-            port: 8080
+            path: {{ default "/actuator/health/readiness" .path }}
+            port: {{ default 8080 .port }}
           initialDelaySeconds: {{ .initialDelaySeconds }}
           periodSeconds: {{ .periodSeconds }}
           timeoutSeconds: {{ .timeoutSeconds }}
@@ -88,8 +88,8 @@ spec:
       {{- if .enabled }}
         startupProbe:
           httpGet:
-            path: /actuator/health/liveness
-            port: 8080
+            path: {{ default "/actuator/health/liveness" .path }}
+            port: {{ default 8080 .port }}
           initialDelaySeconds: {{ .initialDelaySeconds }}
           periodSeconds: {{ .periodSeconds }}
           timeoutSeconds: {{ .timeoutSeconds }}
