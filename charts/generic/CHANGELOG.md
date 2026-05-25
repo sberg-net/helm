@@ -1,6 +1,11 @@
 # Changelog
 
-# 1.7.0 (2026-05-121)
+# 1.8.0 (2026-05-125)
+
+### Added
+* add multiple service configurations
+
+# 1.7.0 (2026-05-21)
 
 ### Added
 * probes make path and port configurable 
