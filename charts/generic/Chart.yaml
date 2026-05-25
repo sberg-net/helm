@@ -1,6 +1,6 @@
 name: generic-app
 apiVersion: v2
-version: 1.6.0
+version: 1.7.0
 appVersion: 1.0.0
 description: Helm chart for generic apps by sberg it-systeme GmbH
 home: https://www.sberg.net
@@ -16,7 +16,7 @@ annotations:
   licenses: Apache-2.0
 dependencies:
   - name: mariadb
-    version: 0.14.1
+    version: 0.16.4
     repository: oci://registry-1.docker.io/cloudpirates
     condition: mariadb.enabled
   - name: common
