@@ -46,10 +46,11 @@ app:
     #- name: LOGGER_LEVEL_NET_SBERG
     #  value: debug
 
-  service:
-    web:
+  services:
+    - name: web
       port: 80
-      type: ClusterIP
+      targetPort: 8080
+      #type: ClusterIP
 
   resources:
     limits:
