@@ -627,6 +627,34 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-05-27T20:24:56.699292598Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: oci://registry-1.docker.io/cloudpirates
+      version: 0.16.4
+    - name: common
+      repository: oci://registry-1.docker.io/cloudpirates
+      version: 2.x.x
+    description: Helm chart for generic apps by sberg it-systeme GmbH
+    digest: 137534bb7b3d871d66cc75e11874cad22e645f078bee65174c536c6aa2a5c1dc
+    home: https://www.sberg.net
+    keywords:
+    - generic
+    - sberg
+    - kubernetes
+    maintainers:
+    - name: sberg it-systeme GmbH
+      url: https://github.com/sberg-net/helm/tree/main/charts
+    name: generic-app
+    urls:
+    - https://github.com/sberg-net/helm/releases/download/generic-app-1.10.0/generic-app-1.10.0.tgz
+    version: 1.10.0
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.0.0
     created: "2026-05-25T18:33:37.598278331Z"
     dependencies:
     - condition: mariadb.enabled
@@ -1068,4 +1096,4 @@ entries:
     urls:
     - https://github.com/sberg-net/helm/releases/download/generic-app-1.0.0/generic-app-1.0.0.tgz
     version: 1.0.0
-generated: "2026-05-25T18:33:37.598439781Z"
+generated: "2026-05-27T20:24:56.699478906Z"
