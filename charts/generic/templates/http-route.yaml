@@ -25,9 +25,9 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: {{ include "app.fullname" $root }}-{{ $httpRoute.service }}
+        - name: {{ include "app.fullname" $root }}-{{ $httpRoute.serviceName }}
           {{- range $service := $.Values.app.services }}
-          {{- if eq $service.name $httpRoute.service }}
+          {{- if eq $service.name $httpRoute.serviceName }}
           port: {{ $service.port }}
           {{- end }}
           {{- end }}
