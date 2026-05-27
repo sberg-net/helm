@@ -27,6 +27,18 @@ ingress:
   #    hosts:
   #     - eldix.domain.de
 
+## HTTPRoute config based on existing gateway
+#gateway:
+#  name: your-gateway-name
+#  namespace: gateway-namespace
+#  hostname: hostname-used-for-http-route
+#  HTTPRoutes:
+#    - sectionName: http
+#      redirectToHttps: true
+#    - sectionName: https
+       ## use service name from app.services
+#      serviceName: web
+
 app:
   image:
     ## full path and name of eldix image (e.g., repository/eldix-image)

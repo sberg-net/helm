@@ -1,0 +1,35 @@
+{{- $root := . -}}
+{{- range $httpRoute := .Values.gateway.HTTPRoutes }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name:  {{ include "app.fullname" $root }}-{{ $httpRoute.sectionName }}
+  labels: {{ include "app.labels" $root | nindent 4 }}
+spec:
+  parentRefs:
+    - name: {{ $.Values.gateway.name }}
+      namespace: {{ $.Values.gateway.namespace }}
+      sectionName: {{ $httpRoute.sectionName }}
+  hostnames:
+    - {{ $.Values.gateway.hostname }}
+  {{- if $httpRoute.redirectToHttps }}
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+  {{- else }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: {{ include "app.fullname" $root }}-{{ $httpRoute.service }}
+          {{- range $service := $.Values.app.services }}
+          {{- if eq $service.name $httpRoute.service }}
+          port: {{ $service.port }}
+          {{- end }}
+          {{- end }}
+  {{- end }}
+  {{- end }}
