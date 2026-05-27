@@ -1,6 +1,6 @@
 # Changelog
 
-# 1.11.0 (2026-05-27)
+# 1.12.0 (2026-05-27)
 
 ### Added
 * add getaway & HTTPRoute configuration
