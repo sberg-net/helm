@@ -29,6 +29,9 @@ spec:
       {{- end }}
       {{- if .Values.mariadb.enabled }}
       initContainers:
+      {{- with .Values.app.extraInitContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
         - name: mariadb-isalive
           image: "docker.io/mariadb:12.2.2"
           env:
@@ -127,6 +130,9 @@ spec:
         - name: "{{ template "app.fullname" . }}-data"
           emptyDir: {}
         {{- else }}
+        {{- with .Values.app.extraVolumes }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
         - name: "{{ include "app.fullname" $ }}-data"
           persistentVolumeClaim:
             claimName: {{ if .Values.app.persistence.useExistingPVC }}

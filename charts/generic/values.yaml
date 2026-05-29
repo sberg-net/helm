@@ -104,6 +104,17 @@ app:
     #port: 8080
     initialDelaySeconds: 30
 
+  extraInitContainers: []
+  #   - name: init-app
+  #     image: busybox
+  #     command: ['sh', '-c', 'echo "Hello from the init container"']
+
+  ## volume mounts for app will be used only if persistence.enabled is true
+  extraVolumes:
+    - name: config-volume
+      configMap:
+        name: my-config-map
+
 ## use mariadb enable this and disable externalDatabase
 mariadb:
   enabled: false
