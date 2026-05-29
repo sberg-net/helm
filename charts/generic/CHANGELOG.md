@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.13.0 (2026-05-29)
+
+### Added
+* add extraInitContainers and extraVolumes
+
 # 1.12.0 (2026-05-27)
 
 ### Added
