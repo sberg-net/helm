@@ -51,9 +51,6 @@ spec:
             {{- end }}
       {{- end }}
       containers:
-      {{- with .Values.app.sidecarContainers }}
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
         - name: {{ template "app.fullname" . }}
           env:
           {{- with .Values.app.environment }}
@@ -123,6 +120,9 @@ spec:
             requests:
               cpu: {{ .Values.app.resources.requests.cpu }}
               memory: {{ .Values.app.resources.requests.memory }}
+      {{- with .Values.app.sidecarContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if .Values.privateRegistry.enabled }}
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.imagePullSecret.name }}
