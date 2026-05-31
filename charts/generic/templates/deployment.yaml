@@ -56,9 +56,9 @@ spec:
       {{- end }}
         - name: {{ template "app.fullname" . }}
           env:
-            {{- with .Values.app.environment }}
-            {{ toYaml . | nindent 8 }}
-            {{- end }}
+          {{- with .Values.app.environment }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           image: {{ template "app.image" . }}
           ports:
           {{- range .Values.app.services }}
