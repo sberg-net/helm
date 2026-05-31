@@ -51,75 +51,78 @@ spec:
             {{- end }}
       {{- end }}
       containers:
-      - name: {{ template "app.fullname" . }}
-        env:
-          {{- with .Values.app.environment }}
-          {{ toYaml . | nindent 8 }}
+      {{- with .Values.app.sidecarContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+        - name: {{ template "app.fullname" . }}
+          env:
+            {{- with .Values.app.environment }}
+            {{ toYaml . | nindent 8 }}
+            {{- end }}
+          image: {{ template "app.image" . }}
+          ports:
+          {{- range .Values.app.services }}
+            - name: {{ .name }}
+              containerPort: {{ .targetPort }}
+              protocol: {{ .protocol | default "TCP" }}
           {{- end }}
-        image: {{ template "app.image" . }}
-        ports:
-        {{- range .Values.app.services }}
-          - name: {{ .name }}
-            containerPort: {{ .targetPort }}
-            protocol: {{ .protocol | default "TCP" }}
-        {{- end }}
-        {{- with .Values.app.livenessProbe }}
-        {{- if .enabled }}
-        livenessProbe:
-          httpGet:
-            path: {{ default "/actuator/health/liveness" .path }}
-            port: {{ default 8080 .port }}
-          initialDelaySeconds: {{ .initialDelaySeconds }}
-          periodSeconds: {{ .periodSeconds }}
-          timeoutSeconds: {{ .timeoutSeconds }}
-          successThreshold: {{ .successThreshold }}
-          failureThreshold: {{ .failureThreshold }}
-        {{- end }}
-        {{- end }}
-        {{- with .Values.app.readinessProbe }}
-        {{- if .enabled }}
-        readinessProbe:
-          httpGet:
-            path: {{ default "/actuator/health/readiness" .path }}
-            port: {{ default 8080 .port }}
-          initialDelaySeconds: {{ .initialDelaySeconds }}
-          periodSeconds: {{ .periodSeconds }}
-          timeoutSeconds: {{ .timeoutSeconds }}
-          successThreshold: {{ .successThreshold }}
-          failureThreshold: {{ .failureThreshold }}
-      {{- end }}
-      {{- end }}
-      {{- with .Values.app.startupProbe }}
-      {{- if .enabled }}
-        startupProbe:
-          httpGet:
-            path: {{ default "/actuator/health/liveness" .path }}
-            port: {{ default 8080 .port }}
-          initialDelaySeconds: {{ .initialDelaySeconds }}
-          periodSeconds: {{ .periodSeconds }}
-          timeoutSeconds: {{ .timeoutSeconds }}
-          successThreshold: {{ .successThreshold }}
-          failureThreshold: {{ .failureThreshold }}
-      {{- end }}
-      {{- end }}
-        {{ if .Values.app.persistence.enabled -}}
-        volumeMounts:
-          {{- range $storage := .Values.app.volumeMounts }}
-          - name: "{{ include "app.fullname" $ }}-data"
-            mountPath: {{ $storage.mountPath }}
-            {{- if $storage.subPath }}
-            subPath: {{ $storage.subPath }}
-            {{- end}}
+          {{- with .Values.app.livenessProbe }}
+          {{- if .enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ default "/actuator/health/liveness" .path }}
+              port: {{ default 8080 .port }}
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            periodSeconds: {{ .periodSeconds }}
+            timeoutSeconds: {{ .timeoutSeconds }}
+            successThreshold: {{ .successThreshold }}
+            failureThreshold: {{ .failureThreshold }}
           {{- end }}
+          {{- end }}
+          {{- with .Values.app.readinessProbe }}
+          {{- if .enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ default "/actuator/health/readiness" .path }}
+              port: {{ default 8080 .port }}
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            periodSeconds: {{ .periodSeconds }}
+            timeoutSeconds: {{ .timeoutSeconds }}
+            successThreshold: {{ .successThreshold }}
+            failureThreshold: {{ .failureThreshold }}
         {{- end }}
-        imagePullPolicy: {{ .Values.app.image.pullPolicy }}
-        resources:
-          limits:
-            cpu: {{ .Values.app.resources.limits.cpu }}
-            memory: {{ .Values.app.resources.limits.memory }}
-          requests:
-            cpu: {{ .Values.app.resources.requests.cpu }}
-            memory: {{ .Values.app.resources.requests.memory }}
+        {{- end }}
+        {{- with .Values.app.startupProbe }}
+        {{- if .enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ default "/actuator/health/liveness" .path }}
+              port: {{ default 8080 .port }}
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            periodSeconds: {{ .periodSeconds }}
+            timeoutSeconds: {{ .timeoutSeconds }}
+            successThreshold: {{ .successThreshold }}
+            failureThreshold: {{ .failureThreshold }}
+        {{- end }}
+        {{- end }}
+          {{ if .Values.app.persistence.enabled -}}
+          volumeMounts:
+            {{- range $storage := .Values.app.volumeMounts }}
+            - name: "{{ include "app.fullname" $ }}-data"
+              mountPath: {{ $storage.mountPath }}
+              {{- if $storage.subPath }}
+              subPath: {{ $storage.subPath }}
+              {{- end}}
+            {{- end }}
+          {{- end }}
+          imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+          resources:
+            limits:
+              cpu: {{ .Values.app.resources.limits.cpu }}
+              memory: {{ .Values.app.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.app.resources.requests.cpu }}
+              memory: {{ .Values.app.resources.requests.memory }}
       {{- if .Values.privateRegistry.enabled }}
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.imagePullSecret.name }}

@@ -109,6 +109,8 @@ app:
   #     image: busybox
   #     command: ['sh', '-c', 'echo "Hello from the init container"']
 
+  sidecarContainers: []
+
   ## volume mounts for app will be used only if persistence.enabled is true
   extraVolumes:
     - name: config-volume
