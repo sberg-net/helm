@@ -1,6 +1,6 @@
 # Changelog
 
-# 1.14.0
+# 1.14.1
 
 ### Added
 * add sidecarContainers to the deployment template
