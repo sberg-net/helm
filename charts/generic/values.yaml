@@ -28,7 +28,8 @@ ingress:
   #     - eldix.domain.de
 
 ## HTTPRoute config based on existing gateway
-#gateway:
+gateway:
+  enabled: false
 #  name: your-gateway-name
 #  namespace: gateway-namespace
 #  hostname: hostname-used-for-http-route
