@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.14.2
+
+### Fixed
+* fix if gateway is not defined
+
 # 1.14.1
 
 ### Added
