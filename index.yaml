@@ -5,6 +5,36 @@ entries:
       category: Infrastructure
       licenses: Apache-2.0
     apiVersion: v2
+    appVersion: 3.7.5
+    created: "2026-06-05T15:03:59.952452294Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 20.2.4
+    - name: common
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Helm chart for eldix a KIM Client System by sberg it-systeme GmbH
+    digest: 057fbeae92c77b4f591b77c401c9f89d85e831307a846a9a1a6401b589eb20fa
+    home: https://www.sberg.net
+    keywords:
+    - Telematik Infrastruktur
+    - KIM
+    - TI
+    maintainers:
+    - name: sberg it-systeme GmbH
+      url: https://github.com/sberg-net/helm/tree/main/charts
+    name: eldix
+    urls:
+    - https://github.com/sberg-net/helm/releases/download/eldix-2.10.0/eldix-2.10.0.tgz
+    version: 2.10.0
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
     appVersion: 3.7.2
     created: "2026-02-06T13:49:08.625307779Z"
     dependencies:
@@ -1264,4 +1294,4 @@ entries:
     urls:
     - https://github.com/sberg-net/helm/releases/download/generic-app-1.0.0/generic-app-1.0.0.tgz
     version: 1.0.0
-generated: "2026-06-01T09:04:37.26793953Z"
+generated: "2026-06-05T15:03:59.952600962Z"
