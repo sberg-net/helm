@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.10.0 (2026-06-05)
+
+### Changed
+* new eldix version 3.7.5
+
 ## 2.9.0 (2026-02-06)
 
 ### Changed
